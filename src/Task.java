@@ -5,6 +5,11 @@ public class Task {
     private Status status;
     private int id;
 
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -14,24 +19,18 @@ public class Task {
     }
 
     public int getId() {
-            return id;
-        }
+        return id;
+    }
 
-        public String getName() {
-                    return name;
-            }
+    public String getName() {
+        return name;
+    }
 
-        public String getDescription() {
-                return description;
-        }
+    public String getDescription() {
+        return description;
+    }
 
-        public Status getStatus() {
-                return status;
-        }
-
-        public Task(String name, String description) {
-                this.name = name;
-                this.description = description;
-
-        }
+    public Status getStatus() {
+        return status;
+    }
 }

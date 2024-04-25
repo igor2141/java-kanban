@@ -4,9 +4,9 @@ import java.util.HashMap;
 public class TaskManager {
     private int idCount = 0;
 /* 1 */
-    HashMap <Integer, Task> taskHashMap = new HashMap<>();
-    HashMap <Integer, Epic> epicHashMap = new HashMap<>();
-    HashMap <Integer, Subtask> subtaskHashMap = new HashMap<>();
+    private HashMap <Integer, Task> taskHashMap = new HashMap<>();
+    private HashMap <Integer, Epic> epicHashMap = new HashMap<>();
+    private HashMap <Integer, Subtask> subtaskHashMap = new HashMap<>();
 /* 2 */
 /* a */
     public HashMap<Integer, Task> returnTasks() {
@@ -27,10 +27,15 @@ public class TaskManager {
 
     public void clearEpics() {
         epicHashMap.clear();
+        subtaskHashMap.clear();
     }
 
     public void clearSubtasks() {
         subtaskHashMap.clear();
+        for (Integer i : epicHashMap.keySet()) {
+            epicHashMap.get(i).getSubtaskArrayList().clear();
+            epicHashMap.get(i).setStatus(Status.NEW);
+        }
     }
 /* c */
     public Task returnTask(int id) {
@@ -85,58 +90,59 @@ public class TaskManager {
         }
     }
 /* e */
-    public void updateTask(int id, Task task, Status status) {
-        task.setId(id);
-        task.setStatus(status);
-        taskHashMap.put(id, task);
-    }
-
-    public void updateEpic(int id, Epic epic) {
-        epic.setSubtaskArrayList(epicHashMap.get(id).getSubtaskArrayList());
-        epic.setId(id);
-        epicHashMap.put(id, epic);
-
-        int checkDone = 0;
-        int checkNew = 0;
-        for (Integer i : epicHashMap.get(id).getSubtaskArrayList()) {
-            if (subtaskHashMap.get(i).getStatus().equals(Status.DONE)) {
-                checkDone++;
-            }
-            if (subtaskHashMap.get(i).getStatus().equals(Status.NEW)) {
-                checkNew++;
-            }
-        }
-        if ((epicHashMap.get(id).getSubtaskArrayList().isEmpty()) || (checkNew == epicHashMap.get(id).getSubtaskArrayList().size())) {
-            epicHashMap.get(id).setStatus(Status.NEW);
-        } else if (checkDone == epicHashMap.get(id).getSubtaskArrayList().size()) {
-            epicHashMap.get(id).setStatus(Status.DONE);
-        } else {
-            epicHashMap.get(id).setStatus(Status.IN_PROGRESS);
+    public void updateTask(Task task) {
+        if (taskHashMap.containsKey(task.getId())) {
+            taskHashMap.put(task.getId(), task);
         }
     }
 
-    public void updateSubtask(int id, Subtask subtask, Status status) {
-        subtask.setId(id);
-        subtask.setStatus(status);
-        subtaskHashMap.put(id, subtask);
+    public void updateEpic(Epic epic) {
+        if (epicHashMap.containsKey(epic.getId())) {
+            epicHashMap.put(epic.getId(), epic);
 
-        int checkDone = 0;
-        int checkNew = 0;
-        for (Integer i : epicHashMap.get(subtask.epicID).getSubtaskArrayList()) {
-            if (subtaskHashMap.get(i).getStatus().equals(Status.DONE)) {
-                checkDone++;
+            int checkDone = 0;
+            int checkNew = 0;
+            for (Integer i : epicHashMap.get(epic.getId()).getSubtaskArrayList()) {
+                if (subtaskHashMap.get(i).getStatus().equals(Status.DONE)) {
+                    checkDone++;
+                }
+                if (subtaskHashMap.get(i).getStatus().equals(Status.NEW)) {
+                    checkNew++;
+                }
             }
-            if (subtaskHashMap.get(i).getStatus().equals(Status.NEW)) {
-                checkNew++;
+            if (checkNew == epicHashMap.get(epic.getId()).getSubtaskArrayList().size()) {
+                epicHashMap.get(epic.getId()).setStatus(Status.NEW);
+            } else if (checkDone == epicHashMap.get(epic.getId()).getSubtaskArrayList().size()) {
+                epicHashMap.get(epic.getId()).setStatus(Status.DONE);
+            } else {
+                epicHashMap.get(epic.getId()).setStatus(Status.IN_PROGRESS);
             }
         }
-        if (checkNew == epicHashMap.get(subtask.epicID).getSubtaskArrayList().size()) {
-            epicHashMap.get(subtask.epicID).setStatus(Status.NEW);
-        } else if (checkDone == epicHashMap.get(subtask.epicID).getSubtaskArrayList().size()) {
-            epicHashMap.get(subtask.epicID).setStatus(Status.DONE);
-        } else {
-            epicHashMap.get(subtask.epicID).setStatus(Status.IN_PROGRESS);
+    }
+
+    public void updateSubtask(Subtask subtask) {
+        if (subtaskHashMap.containsKey(subtask.getId())) {
+            subtaskHashMap.put(subtask.getId(), subtask);
+
+            int checkDone = 0;
+            int checkNew = 0;
+            for (Integer i : epicHashMap.get(subtask.epicID).getSubtaskArrayList()) {
+                if (subtaskHashMap.get(i).getStatus().equals(Status.DONE)) {
+                    checkDone++;
+                }
+                if (subtaskHashMap.get(i).getStatus().equals(Status.NEW)) {
+                    checkNew++;
+                }
+            }
+            if (checkNew == epicHashMap.get(subtask.epicID).getSubtaskArrayList().size()) {
+                epicHashMap.get(subtask.epicID).setStatus(Status.NEW);
+            } else if (checkDone == epicHashMap.get(subtask.epicID).getSubtaskArrayList().size()) {
+                epicHashMap.get(subtask.epicID).setStatus(Status.DONE);
+            } else {
+                epicHashMap.get(subtask.epicID).setStatus(Status.IN_PROGRESS);
+            }
         }
+
     }
 /* f */
     public void deleteTask(int id) {
@@ -144,6 +150,11 @@ public class TaskManager {
     }
 
     public void deleteEpic(int id) {
+        for (Integer i : epicHashMap.get(id).getSubtaskArrayList()) {
+            if (subtaskHashMap.containsKey(i)) {
+                subtaskHashMap.remove(i);
+            }
+        }
         epicHashMap.remove(id);
     }
 
