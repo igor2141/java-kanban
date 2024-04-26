@@ -15,6 +15,7 @@ public class Main {
         tm.createSubtask(new Subtask("name6", "desc6", 3), Status.NEW);
         tm.createSubtask(new Subtask("name7", "desc7", 4), Status.IN_PROGRESS);
 
+
         Task test1 = new Task("name11", "desc11");
         test1.setId(1);
         test1.setStatus(Status.DONE);
@@ -32,8 +33,8 @@ public class Main {
 
         Epic test4 = new Epic("name33", "desc33");
         test4.setId(3);
-        test4.getSubtaskArrayList().add(5);
-        test4.getSubtaskArrayList().add(6);
+        test4.getSubtaskArrayList().add(55);
+        test4.getSubtaskArrayList().add(66);
         tm.updateEpic(test4);
 
         tm.deleteSubtask(7);

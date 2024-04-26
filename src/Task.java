@@ -14,6 +14,10 @@ public class Task {
         this.status = status;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -30,7 +34,4 @@ public class Task {
         return description;
     }
 
-    public Status getStatus() {
-        return status;
-    }
 }

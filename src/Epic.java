@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
 
-    private ArrayList <Integer> subtaskArrayList;
+    private ArrayList<Integer> subtaskArrayList;
 
     public Epic(String name, String description) {
         super(name, description);
@@ -13,7 +13,7 @@ public class Epic extends Task {
         this.subtaskArrayList = subtaskArrayList;
     }
 
-    public ArrayList <Integer> getSubtaskArrayList() {
+    public ArrayList<Integer> getSubtaskArrayList() {
         return subtaskArrayList;
     }
 
