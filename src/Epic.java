@@ -17,4 +17,7 @@ public class Epic extends Task {
         return subtaskArrayList;
     }
 
+    public void clearList() {
+        subtaskArrayList.clear();
+    }
 }
