@@ -1,11 +1,13 @@
 package tasks;
 
+import static tasks.Managers.getDefault;
+
 public class Main {
 
     public static void main(String[] args) {
 
 /* debug */
-        TaskManager tm = new InMemoryTaskManager();
+        TaskManager tm = getDefault();
 
         tm.createTask(new Task("name1", "desc1"), Status.NEW);
         tm.createTask(new Task("name2", "desc2"), Status.IN_PROGRESS);
@@ -37,8 +39,22 @@ public class Main {
         test4.getSubtaskArrayList().add(66);
         tm.updateEpic(test4);
 
+        tm.returnTask(1);
+        tm.returnTask(2);
+        tm.returnEpic(3);
+        tm.returnEpic(4);
+        tm.returnSubtask(5);
+        tm.returnSubtask(6);
+        tm.returnSubtask(7);
+        tm.returnTask(1);
+        tm.returnTask(2);
+        tm.returnEpic(3);
+        tm.returnEpic(4);
+        tm.returnSubtask(5);
+        tm.returnSubtask(6);
+        tm.returnSubtask(7);
+
         tm.deleteSubtask(7);
         tm.deleteEpic(3);
-
     }
 }

@@ -2,12 +2,12 @@ package tasks;
 
 public class Managers {
 
-    public TaskManager getDefault() {
+    public static TaskManager getDefault() {
         TaskManager taskManager = new InMemoryTaskManager();
         return taskManager;
     }
 
-    public HistoryManager getDefaultHistory() {
+    public static HistoryManager getDefaultHistory() {
         HistoryManager historyManager = new InMemoryHistoryManager();
         return historyManager;
     }

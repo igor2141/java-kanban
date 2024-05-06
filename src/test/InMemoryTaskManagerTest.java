@@ -3,13 +3,13 @@ package test;
 import org.junit.jupiter.api.Test;
 import tasks.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static tasks.Managers.getDefault;
 
 class InMemoryTaskManagerTest {
 
-
     @Test
     void createTasks() {
-        TaskManager tm = new InMemoryTaskManager();
+        TaskManager tm = getDefault();
         tm.createTask(new Task("name2", "desc2"), Status.IN_PROGRESS);
         assertNotNull(tm.returnTask(1));
 
@@ -22,7 +22,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void manualIdSet() {
-        TaskManager tm = new InMemoryTaskManager();
+        TaskManager tm = getDefault();
         tm.createTask(new Task("name2", "desc2"), Status.IN_PROGRESS);
         Task task = new Task("name1", "desc2");
         task.setId(1);
@@ -32,16 +32,15 @@ class InMemoryTaskManagerTest {
 
     @Test
     void creationTest() {
-        TaskManager tm = new InMemoryTaskManager();
+        TaskManager tm = getDefault();
         Epic epic = new Epic("name3", "desc3");
         tm.createEpic(epic);
-
         assertEquals(epic, tm.returnEpic(1));
     }
 
     @Test
     void legacyTests() {
-        TaskManager tm = new InMemoryTaskManager();
+        TaskManager tm = getDefault();
 
         tm.createTask(new Task("name1", "desc1"), Status.NEW);
         tm.createTask(new Task("name2", "desc2"), Status.IN_PROGRESS);
@@ -50,7 +49,6 @@ class InMemoryTaskManagerTest {
         tm.createSubtask(new Subtask("name5", "desc5", 3), Status.NEW);
         tm.createSubtask(new Subtask("name6", "desc6", 3), Status.NEW);
         tm.createSubtask(new Subtask("name7", "desc7", 4), Status.IN_PROGRESS);
-
 
         Task test1 = new Task("name11", "desc11");
         test1.setId(1);

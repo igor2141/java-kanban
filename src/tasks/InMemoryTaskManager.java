@@ -3,6 +3,8 @@ package tasks;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static tasks.Managers.getDefaultHistory;
+
 
 public class InMemoryTaskManager implements TaskManager {
     private int idCount = 0;
@@ -11,7 +13,8 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
 
-    HistoryManager historyManager = new InMemoryHistoryManager();
+    HistoryManager historyManager = getDefaultHistory();
+
 /* 2 */
 /* a */
     @Override
