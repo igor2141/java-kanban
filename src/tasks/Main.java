@@ -1,11 +1,11 @@
-
+package tasks;
 
 public class Main {
 
     public static void main(String[] args) {
 
 /* debug */
-        TaskManager tm = new TaskManager();
+        TaskManager tm = new InMemoryTaskManager();
 
         tm.createTask(new Task("name1", "desc1"), Status.NEW);
         tm.createTask(new Task("name2", "desc2"), Status.IN_PROGRESS);
