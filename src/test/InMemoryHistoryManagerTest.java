@@ -1,10 +1,11 @@
 package test;
 
+import service.HistoryManager;
 import org.junit.jupiter.api.Test;
 import tasks.*;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import static tasks.Managers.getDefaultHistory;
+import static service.Managers.getDefaultHistory;
 
 class InMemoryHistoryManagerTest {
 

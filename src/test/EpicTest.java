@@ -1,10 +1,11 @@
 package test;
 
+import service.TaskManager;
 import org.junit.jupiter.api.Test;
 import tasks.*;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
-import static tasks.Managers.getDefault;
+import static service.Managers.getDefault;
 
 class EpicTest {
 

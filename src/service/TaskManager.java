@@ -1,15 +1,20 @@
-package tasks;
+package service;
 
-import java.util.ArrayList;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
+
+import java.util.List;
 
 public interface TaskManager {
     /* 2 */
     /* a */
-    ArrayList<Task> returnTasks();
+    List<Task> returnTasks();
 
-    ArrayList<Epic> returnEpics();
+    List<Epic> returnEpics();
 
-    ArrayList<Subtask> returnSubtasks();
+    List<Subtask> returnSubtasks();
 
     /* b */
     void clearTasks();
@@ -48,5 +53,7 @@ public interface TaskManager {
 
     /* 3 */
     /* a */
-    ArrayList<Integer> returnEpicSubtasks(int id);
+    List<Integer> returnEpicSubtasks(int id);
+
+    List<Task> getHistory();
 }

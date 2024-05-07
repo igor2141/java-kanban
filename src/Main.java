@@ -1,6 +1,7 @@
-package tasks;
+import service.*;
+import tasks.*;
 
-import static tasks.Managers.getDefault;
+import static service.Managers.getDefault;
 
 public class Main {
 
