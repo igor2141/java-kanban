@@ -54,6 +54,7 @@ public class Main {
         tm.returnSubtask(5);
         tm.returnSubtask(6);
         tm.returnSubtask(7);
+        tm.returnEpic(3);
 
         tm.deleteSubtask(7);
         tm.deleteEpic(3);
