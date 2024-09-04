@@ -2,17 +2,16 @@ package service;
 
 import tasks.Task;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    Set<Task> history = new LinkedHashSet<>();
+    private List<Task> history = new ArrayList<>();
 
     @Override
     public void historyAdd(Task task) {
-        if (history.contains(task)) {
-            history.remove(task);
-        }
+        historyUpdateCheck();
         history.add(task);
     }
 
@@ -21,4 +20,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         return new ArrayList<>(history);
     }
 
+    private void historyUpdateCheck() {
+        if (history.size() > 9) {
+            history.remove(0);
+        }
+    }
 }
