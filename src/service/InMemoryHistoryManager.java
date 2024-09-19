@@ -18,7 +18,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void historyRemove(int id) {
-        history.removeNode(history.nodes.get(id));
+        history.removeNode(history.nodes.remove(id));
     }
 
     @Override
@@ -44,6 +44,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         private Map<Integer, Node> nodes = new HashMap<>();
 
         public void addLast(Task task) {
+            if (nodes.containsKey(task.getId())) {
+                removeNode(nodes.get(task.getId()));
+            }
+
             Node oldTail = tail;
             Node newNode = new Node(tail, task, null);
             tail = newNode;
@@ -52,14 +56,6 @@ public class InMemoryHistoryManager implements HistoryManager {
                 oldTail.next = newNode;
             } else {
                 head = newNode;
-            }
-
-            if (nodes.containsKey(task.getId())) {
-                removeNode(nodes.get(task.getId()));
-            }
-
-            if (!nodes.isEmpty()) {
-                nodes.replace(oldTail.data.getId(), oldTail);
             }
             nodes.put(task.getId(), tail);
         }
@@ -85,23 +81,15 @@ public class InMemoryHistoryManager implements HistoryManager {
             if ((head.equals(node)) && (tail.equals(node))) {
                 head = null;
                 tail = null;
-                nodes.remove(node.data.getId());
             } else if (head.equals(node)) {
                 head = head.next;
                 head.prev = null;
-                nodes.replace(head.data.getId(), head);
-                nodes.remove(node.data.getId());
             } else if (tail.equals(node)) {
                 tail = tail.prev;
                 tail.next = null;
-                nodes.replace(tail.data.getId(), tail);
-                nodes.remove(node.data.getId());
             } else {
                 prevNode.next = node.next;
                 nextNode.prev = node.prev;
-                nodes.replace(prevNode.data.getId(), prevNode);
-                nodes.replace(nextNode.data.getId(), nextNode);
-                nodes.remove(node.data.getId());
             }
         }
     }

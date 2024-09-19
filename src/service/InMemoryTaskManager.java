@@ -42,33 +42,33 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearTasks() {
-        for (Integer i: tasks.keySet()) {
-            historyManager.historyRemove(i);
+        for (Integer taskId: tasks.keySet()) {
+            historyManager.historyRemove(taskId);
         }
         tasks.clear();
     }
 
     @Override
     public void clearEpics() {
-        for (Integer i: epics.keySet()) {
-            historyManager.historyRemove(i);
+        for (Integer epicId: epics.keySet()) {
+            historyManager.historyRemove(epicId);
         }
         epics.clear();
-        for (Integer i: subtasks.keySet()) {
-            historyManager.historyRemove(i);
+        for (Integer subtaskId: subtasks.keySet()) {
+            historyManager.historyRemove(subtaskId);
         }
         subtasks.clear();
     }
 
     @Override
     public void clearSubtasks() {
-        for (Integer i: subtasks.keySet()) {
-            historyManager.historyRemove(i);
+        for (Integer subtaskId: subtasks.keySet()) {
+            historyManager.historyRemove(subtaskId);
         }
         subtasks.clear();
-        for (Integer i : epics.keySet()) {
-            epics.get(i).clearList();
-            epicStatusUpdate(i);
+        for (Epic epic : epics.values()) {
+            epic.clearList();
+            epicStatusUpdate(epic.getId());
         }
     }
 /* c */
@@ -156,10 +156,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpic(int id) {
-        for (Integer i : epics.get(id).getSubtaskArrayList()) {
-            if (subtasks.containsKey(i)) {
-                subtasks.remove(i);
-                historyManager.historyRemove(i);
+        for (Integer subtaskId : epics.get(id).getSubtaskArrayList()) {
+            if (subtasks.containsKey(subtaskId)) {
+                subtasks.remove(subtaskId);
+                historyManager.historyRemove(subtaskId);
             }
         }
         epics.remove(id);
@@ -195,11 +195,11 @@ public class InMemoryTaskManager implements TaskManager {
         int checkDone = 0;
         int checkNew = 0;
 
-        for (Integer i : epics.get(id).getSubtaskArrayList()) {
-            if (subtasks.get(i).getStatus().equals(Status.DONE)) {
+        for (Integer subtaskId : epics.get(id).getSubtaskArrayList()) {
+            if (subtasks.get(subtaskId).getStatus().equals(Status.DONE)) {
                 checkDone++;
             }
-            if (subtasks.get(i).getStatus().equals(Status.NEW)) {
+            if (subtasks.get(subtaskId).getStatus().equals(Status.NEW)) {
                 checkNew++;
             }
         }
