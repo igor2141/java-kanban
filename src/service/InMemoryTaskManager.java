@@ -39,44 +39,62 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(subtasks.values());
     }
 /* b */
+
     @Override
     public void clearTasks() {
+        for (Integer taskId: tasks.keySet()) {
+            historyManager.historyRemove(taskId);
+        }
         tasks.clear();
     }
 
     @Override
     public void clearEpics() {
+        for (Integer epicId: epics.keySet()) {
+            historyManager.historyRemove(epicId);
+        }
         epics.clear();
+        for (Integer subtaskId: subtasks.keySet()) {
+            historyManager.historyRemove(subtaskId);
+        }
         subtasks.clear();
     }
 
     @Override
     public void clearSubtasks() {
+        for (Integer subtaskId: subtasks.keySet()) {
+            historyManager.historyRemove(subtaskId);
+        }
         subtasks.clear();
-        for (Integer i : epics.keySet()) {
-            epics.get(i).clearList();
-            epicStatusUpdate(i);
+        for (Epic epic : epics.values()) {
+            epic.clearList();
+            epicStatusUpdate(epic.getId());
         }
     }
 /* c */
+
     @Override
     public Task returnTask(int id) {
-        historyManager.historyAdd(tasks.get(id));
-        return tasks.get(id);
+        final Task task = tasks.get(id);
+        historyManager.historyAdd(task);
+        return task;
     }
 
     @Override
     public Epic returnEpic(int id) {
-        historyManager.historyAdd(epics.get(id));
-        return epics.get(id);
+        final Epic epic = epics.get(id);
+        historyManager.historyAdd(epic);
+        return epic;
     }
 
     @Override
     public Subtask returnSubtask(int id) {
-        historyManager.historyAdd(subtasks.get(id));
-        return subtasks.get(id);
+        final Subtask subtask = subtasks.get(id);
+        historyManager.historyAdd(subtask);
+        return subtask;
     }
 /* d */
+
     @Override
     public void createTask(Task task, Status status) {
         idCount++;
@@ -103,6 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
         epicStatusUpdate(subtask.getEpicID());
     }
 /* e */
+
     @Override
     public void updateTask(Task task) {
         if (tasks.containsKey(task.getId())) {
@@ -128,19 +147,23 @@ public class InMemoryTaskManager implements TaskManager {
 
     }
 /* f */
+
     @Override
     public void deleteTask(int id) {
         tasks.remove(id);
+        historyManager.historyRemove(id);
     }
 
     @Override
     public void deleteEpic(int id) {
-        for (Integer i : epics.get(id).getSubtaskArrayList()) {
-            if (subtasks.containsKey(i)) {
-                subtasks.remove(i);
+        for (Integer subtaskId : epics.get(id).getSubtaskArrayList()) {
+            if (subtasks.containsKey(subtaskId)) {
+                subtasks.remove(subtaskId);
+                historyManager.historyRemove(subtaskId);
             }
         }
         epics.remove(id);
+        historyManager.historyRemove(id);
     }
 
     @Override
@@ -148,10 +171,12 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtasks.get(id).getEpicID();
         epics.get(subtasks.get(id).getEpicID()).getSubtaskArrayList().remove((Integer) id);
         subtasks.remove(id);
+        historyManager.historyRemove(id);
         epicStatusUpdate(epicId);
     }
 /* 3 */
 /* a */
+
     @Override
     public List<Integer> returnEpicSubtasks(int id) {
         if (epics.containsKey(id)) {
@@ -170,11 +195,11 @@ public class InMemoryTaskManager implements TaskManager {
         int checkDone = 0;
         int checkNew = 0;
 
-        for (Integer i : epics.get(id).getSubtaskArrayList()) {
-            if (subtasks.get(i).getStatus().equals(Status.DONE)) {
+        for (Integer subtaskId : epics.get(id).getSubtaskArrayList()) {
+            if (subtasks.get(subtaskId).getStatus().equals(Status.DONE)) {
                 checkDone++;
             }
-            if (subtasks.get(i).getStatus().equals(Status.NEW)) {
+            if (subtasks.get(subtaskId).getStatus().equals(Status.NEW)) {
                 checkNew++;
             }
         }
