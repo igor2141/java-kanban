@@ -14,13 +14,30 @@ import static service.Managers.getDefaultHistory;
 
 
 public class InMemoryTaskManager implements TaskManager {
+
     private int idCount = 0;
-/* 1 */
+    /* 1 */
     private Map<Integer, Task> tasks = new HashMap<>();
     private Map<Integer, Epic> epics = new HashMap<>();
     private Map<Integer, Subtask> subtasks = new HashMap<>();
 
     HistoryManager historyManager = getDefaultHistory();
+
+    public void setIdCount(int idCount) {
+        this.idCount = idCount;
+    }
+
+    public Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    public Map<Integer, Epic> getEpics() {
+        return epics;
+    }
+
+    public Map<Integer, Subtask> getSubtasks() {
+        return subtasks;
+    }
 
 /* 2 */
 /* a */

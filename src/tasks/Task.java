@@ -36,4 +36,8 @@ public class Task {
         return description;
     }
 
+    @Override
+    public String toString() {
+        return id + ",TASK," + name + "," + status + "," + description;
+    }
 }

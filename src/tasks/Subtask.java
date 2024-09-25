@@ -12,4 +12,9 @@ public class Subtask extends Task {
     public int getEpicID() {
         return epicID;
     }
+
+    @Override
+    public String toString() {
+        return getId() + ",SUBTASK," + getName() + "," + getStatus() + "," + getDescription() + "," + epicID;
+    }
 }

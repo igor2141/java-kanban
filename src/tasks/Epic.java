@@ -22,4 +22,9 @@ public class Epic extends Task {
     public void clearList() {
         subtaskArrayList.clear();
     }
+
+    @Override
+    public String toString() {
+        return getId() + ",EPIC," + getName() + "," + getStatus() + "," + getDescription();
+    }
 }
