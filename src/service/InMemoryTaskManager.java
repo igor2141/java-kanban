@@ -23,7 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     HistoryManager historyManager = getDefaultHistory();
 
-    public void setIdCount(int idCount) {
+    protected void setIdCount(int idCount) {
         this.idCount = idCount;
     }
 

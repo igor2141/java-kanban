@@ -20,13 +20,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(data))) {
             for (Task task: getTasks().values()) {
-                bw.write(task.toString() + "\n");
+                bw.write(toString(task) + "\n");
             }
             for (Epic epic: getEpics().values()) {
-                bw.write(epic.toString() + "\n");
+                bw.write(toString(epic) + "\n");
             }
             for (Subtask subtask: getSubtasks().values()) {
-                bw.write(subtask.toString() + "\n");
+                bw.write(toString(subtask) + "\n");
             }
         } catch (IOException exc) {
             throw new ManagerSaveException();
@@ -42,8 +42,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             for (String line: lines) {
                 String[] words = line.split(",");
                 int lastId = 0;
-                switch (words[1]) {
-                    case "TASK" -> {
+                switch (Type.valueOf(words[1])) {
+                    case TASK -> {
                         int savedId = Integer.parseInt(words[0]);
                         if (savedId > lastId) {
                             lastId = savedId;
@@ -51,7 +51,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         setIdCount(savedId - 1);
                         createTask(new Task(words[2], words[4]), Status.valueOf(words[3]));
                     }
-                    case "EPIC" -> {
+                    case EPIC -> {
                         int savedId = Integer.parseInt(words[0]);
                         if (savedId > lastId) {
                             lastId = savedId;
@@ -59,7 +59,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         setIdCount(savedId - 1);
                         createEpic(new Epic(words[2], words[4]));
                     }
-                    case "SUBTASK" -> {
+                    case SUBTASK -> {
                         int savedId = Integer.parseInt(words[0]);
                         if (savedId > lastId) {
                             lastId = savedId;
@@ -147,5 +147,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
+    public String toString(Task task) {
+        return task.getId() + "," + Type.TASK + "," + task.getName()
+                + "," + task.getStatus() + "," + task.getDescription();
+    }
 
+    public String toString(Epic epic) {
+        return epic.getId() + "," + Type.EPIC + "," + epic.getName()
+                + "," + epic.getStatus() + "," + epic.getDescription();
+    }
+
+    public String toString(Subtask subtask) {
+        return subtask.getId() + "," + Type.SUBTASK + "," + subtask.getName()
+                + "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpicID();
+    }
 }
