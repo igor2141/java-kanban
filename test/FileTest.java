@@ -8,6 +8,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +29,12 @@ class FileTest {
     void writeTest() throws IOException {
         File f = File.createTempFile("test", ".csv");
         TaskManager tm = new FileBackedTaskManager(f);
-        tm.createTask(new Task("name1", "desc1"), Status.NEW);
+        tm.createTask(new Task("name1", "desc1",
+                LocalDateTime.of(2024, 11, 18, 15, 36), 5), Status.NEW);
         tm.createEpic(new Epic("name2", "desc2"));
-        tm.createSubtask(new Subtask("name3", "desc3", 2), Status.IN_PROGRESS);
+        tm.createSubtask(new Subtask("name3", "desc3",
+                (LocalDateTime.of(2024, 10, 17, 14, 26)), 1,
+                2), Status.IN_PROGRESS);
         List<String> file = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             while (br.ready()) {
@@ -39,9 +43,9 @@ class FileTest {
         } catch (IOException e) {
             throw new ManagerSaveException();
         }
-        assertEquals(file.get(0), "1,TASK,name1,NEW,desc1");
+        assertEquals(file.get(0), "1,TASK,name1,NEW,desc1,2024-11-18T15:36,5");
         assertEquals(file.get(1), "2,EPIC,name2,IN_PROGRESS,desc2");
-        assertEquals(file.get(2), "3,SUBTASK,name3,IN_PROGRESS,desc3,2");
+        assertEquals(file.get(2), "3,SUBTASK,name3,IN_PROGRESS,desc3,2024-10-17T14:26,1,2");
     }
 
     @Test
@@ -49,9 +53,9 @@ class FileTest {
         File f = File.createTempFile("test", ".csv");
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             bw.write("""
-                    1,TASK,name1,NEW,desc1
+                    1,TASK,name1,NEW,desc1,2024-11-18T15:36,5
                     2,EPIC,name2,IN_PROGRESS,desc2
-                    3,SUBTASK,name3,IN_PROGRESS,desc3,2""");
+                    3,SUBTASK,name3,IN_PROGRESS,desc3,2024-10-17T14:26,1,2""");
         } catch (IOException e) {
             throw new ManagerSaveException();
         }

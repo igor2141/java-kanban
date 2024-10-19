@@ -6,6 +6,7 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             lastId = savedId;
                         }
                         setIdCount(savedId - 1);
-                        createTask(new Task(words[2], words[4]), Status.valueOf(words[3]));
+                        createTask(new Task(words[2], words[4], LocalDateTime.parse(words[5]),
+                                Integer.parseInt(words[6])), Status.valueOf(words[3]));
                     }
                     case EPIC -> {
                         int savedId = Integer.parseInt(words[0]);
@@ -65,7 +67,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             lastId = savedId;
                         }
                         setIdCount(savedId - 1);
-                        createSubtask(new Subtask(words[2], words[4], Integer.parseInt(words[5])), Status.valueOf(words[3]));
+                        createSubtask(new Subtask(words[2], words[4], LocalDateTime.parse(words[5]),
+                                Integer.parseInt(words[6]), Integer.parseInt(words[7])), Status.valueOf(words[3]));
                     }
                 }
                 setIdCount(lastId);
@@ -149,7 +152,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public String toString(Task task) {
         return task.getId() + "," + Type.TASK + "," + task.getName()
-                + "," + task.getStatus() + "," + task.getDescription();
+                + "," + task.getStatus() + "," + task.getDescription() + "," + task.getStartTime() + "," +
+                task.getDuration();
     }
 
     public String toString(Epic epic) {
@@ -159,6 +163,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public String toString(Subtask subtask) {
         return subtask.getId() + "," + Type.SUBTASK + "," + subtask.getName()
-                + "," + subtask.getStatus() + "," + subtask.getDescription() + "," + subtask.getEpicID();
+                + "," + subtask.getStatus() + "," + subtask.getDescription() + "," +
+                subtask.getStartTime() + "," + subtask.getDuration() + "," + subtask.getEpicID();
     }
 }

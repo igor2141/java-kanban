@@ -1,8 +1,15 @@
-import service.TaskManager;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import service.TaskManager;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
+
+import java.time.LocalDateTime;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static service.Managers.getDefault;
 
 class SubtaskTest {
@@ -12,7 +19,8 @@ class SubtaskTest {
         TaskManager tm = getDefault();
         Epic epic = new Epic("name3", "desc3");
         tm.createEpic(epic);
-        Subtask subtask = new Subtask("name5", "desc5", 1);
+        Subtask subtask = new Subtask("name5", "desc5",
+                (LocalDateTime.of(2024, 10, 17, 14, 26)), 1,1);
         tm.createSubtask(subtask, Status.NEW);
         Task savedTask = tm.returnSubtask(2);
         assertNotNull(savedTask);

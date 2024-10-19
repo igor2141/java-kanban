@@ -6,10 +6,13 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     /* 2 */
     /* a */
+    Set<Task> getPrioritizedTasks();
+
     List<Task> returnTasks();
 
     List<Epic> returnEpics();
@@ -56,4 +59,5 @@ public interface TaskManager {
     List<Integer> returnEpicSubtasks(int id);
 
     List<Task> getHistory();
+
 }
