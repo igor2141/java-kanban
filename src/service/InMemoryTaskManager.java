@@ -244,22 +244,33 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void epicTimeUpdate(int id) {
-        int epicDuration = 0;
-
-        if (epics.get(id).getSubtaskArrayList().isEmpty()) {
-            epics.get(id).setDuration(epicDuration);
-            epics.get(id).setStartTime(null);
+        if (!epics.containsKey(id)) {
             return;
         }
-        LocalDateTime epicStart = subtasks.get(epics.get(id).getSubtaskArrayList().get(0)).getStartTime();
-        for (Integer subId: epics.get(id).getSubtaskArrayList()) {
+
+        int epicDuration = 0;
+        Epic epic = epics.get(id);
+
+        if (epic.getSubtaskArrayList().isEmpty()) {
+            epic.setDuration(epicDuration);
+            epic.setStartTime(null);
+            epic.setEpicEndTime(null);
+            return;
+        }
+        LocalDateTime epicStart = subtasks.get(epic.getSubtaskArrayList().get(0)).getStartTime();
+        LocalDateTime lastSubtaskEnd = subtasks.get(epic.getSubtaskArrayList().get(0)).getEndTime();
+        for (Integer subId: epic.getSubtaskArrayList()) {
             epicDuration += (subtasks.get(subId).getDuration());
             if (epicStart.isAfter(subtasks.get(subId).getStartTime())) {
                 epicStart = subtasks.get(subId).getStartTime();
             }
+            if (lastSubtaskEnd.isBefore(subtasks.get(subId).getEndTime())) {
+                lastSubtaskEnd = subtasks.get(subId).getEndTime();
+            }
         }
-        epics.get(id).setDuration(epicDuration);
-        epics.get(id).setStartTime(epicStart);
+        epic.setDuration(epicDuration);
+        epic.setStartTime(epicStart);
+        epic.setEpicEndTime(lastSubtaskEnd);
     }
 
 }
