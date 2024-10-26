@@ -17,9 +17,11 @@ import java.time.LocalDateTime;
 
 public class TaskHandler implements HttpHandler {
     TaskManager tm;
+
     public TaskHandler(TaskManager tm) {
         this.tm = tm;
     }
+
     Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -150,6 +152,7 @@ public class TaskHandler implements HttpHandler {
             httpExchange.close();
         }
     }
+
     private void handlePostUpdatedTask(HttpExchange httpExchange) throws IOException {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
