@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
 
 public class TaskHandler implements HttpHandler {
     private final TaskManager tm;
-    final String NAME = "name";
-    final String DESCRIPTION = "description";
-    final String START_TIME = "startTime";
-    final String DURATION = "duration";
-    final String STATUS = "status";
-    final String EPIC_ID = "epicID";
+    final String name = "name";
+    final String description = "description";
+    final String startTime = "startTime";
+    final String duration = "duration";
+    final String status = "status";
+    final String epicID = "epicID";
 
     public TaskHandler(TaskManager tm) {
         this.tm = tm;
@@ -144,11 +144,11 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            tm.createTask(new Task(jsonObject.get(NAME).getAsString(),
-                            jsonObject.get(DESCRIPTION).getAsString(),
-                            LocalDateTime.parse(jsonObject.get(START_TIME).getAsString()),
-                            jsonObject.get(DURATION).getAsInt()),
-                    Status.valueOf(jsonObject.get(STATUS).getAsString()));
+            tm.createTask(new Task(jsonObject.get(name).getAsString(),
+                            jsonObject.get(description).getAsString(),
+                            LocalDateTime.parse(jsonObject.get(startTime).getAsString()),
+                            jsonObject.get(duration).getAsInt()),
+                    Status.valueOf(jsonObject.get(status).getAsString()));
             httpExchange.sendResponseHeaders(201,0);
         } catch (TimeOverlapException e) {
             httpExchange.sendResponseHeaders(406, 0);
@@ -163,12 +163,12 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Task task = new Task(jsonObject.get(NAME).getAsString(),
-                    jsonObject.get(DESCRIPTION).getAsString(),
-                    LocalDateTime.parse(jsonObject.get(START_TIME).getAsString()),
-                    jsonObject.get(DURATION).getAsInt());
+            Task task = new Task(jsonObject.get(name).getAsString(),
+                    jsonObject.get(description).getAsString(),
+                    LocalDateTime.parse(jsonObject.get(startTime).getAsString()),
+                    jsonObject.get(duration).getAsInt());
             task.setId(pathId(httpExchange));
-            task.setStatus(Status.valueOf(jsonObject.get(STATUS).getAsString()));
+            task.setStatus(Status.valueOf(jsonObject.get(status).getAsString()));
             tm.updateTask(task);
             httpExchange.sendResponseHeaders(201, 0);
         }  catch (NotFoundException e) {
@@ -219,12 +219,12 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            tm.createSubtask(new Subtask(jsonObject.get(NAME).getAsString(),
-                            jsonObject.get(DESCRIPTION).getAsString(),
-                            LocalDateTime.parse(jsonObject.get(START_TIME).getAsString()),
-                            jsonObject.get(DURATION).getAsInt(),
-                            jsonObject.get(EPIC_ID).getAsInt()),
-                    Status.valueOf(jsonObject.get(STATUS).getAsString()));
+            tm.createSubtask(new Subtask(jsonObject.get(name).getAsString(),
+                            jsonObject.get(description).getAsString(),
+                            LocalDateTime.parse(jsonObject.get(startTime).getAsString()),
+                            jsonObject.get(duration).getAsInt(),
+                            jsonObject.get(epicID).getAsInt()),
+                    Status.valueOf(jsonObject.get(status).getAsString()));
             httpExchange.sendResponseHeaders(201, 0);
         } catch (TimeOverlapException e) {
             httpExchange.sendResponseHeaders(406, 0);
@@ -239,13 +239,13 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Subtask subtask = new Subtask(jsonObject.get(NAME).getAsString(),
-                    jsonObject.get(DESCRIPTION).getAsString(),
-                    LocalDateTime.parse(jsonObject.get(START_TIME).getAsString()),
-                    jsonObject.get(DURATION).getAsInt(),
-                    jsonObject.get(EPIC_ID).getAsInt());
+            Subtask subtask = new Subtask(jsonObject.get(name).getAsString(),
+                    jsonObject.get(description).getAsString(),
+                    LocalDateTime.parse(jsonObject.get(startTime).getAsString()),
+                    jsonObject.get(duration).getAsInt(),
+                    jsonObject.get(epicID).getAsInt());
             subtask.setId(pathId(httpExchange));
-            subtask.setStatus(Status.valueOf(jsonObject.get(STATUS).getAsString()));
+            subtask.setStatus(Status.valueOf(jsonObject.get(status).getAsString()));
             tm.updateSubtask(subtask);
             httpExchange.sendResponseHeaders(201, 0);
         }  catch (NotFoundException e) {
@@ -296,8 +296,8 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            tm.createEpic(new Epic(jsonObject.get(NAME).getAsString(),
-                    jsonObject.get(DESCRIPTION).getAsString()));
+            tm.createEpic(new Epic(jsonObject.get(name).getAsString(),
+                    jsonObject.get(description).getAsString()));
             httpExchange.sendResponseHeaders(201, 0);
         } catch (Exception e) {
             httpExchange.sendResponseHeaders(500, 0);
@@ -310,8 +310,8 @@ public class TaskHandler implements HttpHandler {
         try {
             JsonElement jsonElement = JsonParser.parseString(getBodyFromRequest(httpExchange));
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            Epic epic = new Epic(jsonObject.get(NAME).getAsString(),
-                    jsonObject.get(DESCRIPTION).getAsString());
+            Epic epic = new Epic(jsonObject.get(name).getAsString(),
+                    jsonObject.get(description).getAsString());
             epic.setId((pathId(httpExchange)));
             tm.updateEpic(epic);
             httpExchange.sendResponseHeaders(201, 0);
