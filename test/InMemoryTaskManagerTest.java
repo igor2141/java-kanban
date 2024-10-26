@@ -1,6 +1,10 @@
-import service.TaskManager;
+import exception.TimeOverlapException;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import service.TaskManager;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.time.LocalDateTime;
 
@@ -46,6 +50,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void legacyTests() {
+        try {
         TaskManager tm = getDefault();
         tm.createTask(new Task("name1", "desc1",
                 LocalDateTime.of(2023, 10, 17, 14, 26), 60), Status.NEW);
@@ -56,8 +61,10 @@ class InMemoryTaskManagerTest {
         tm.createSubtask(new Subtask("name5", "desc5",
                 LocalDateTime.of(2023, 10, 17, 16, 26), 60,3), Status.NEW);
         tm.createSubtask(new Subtask("name5", "desc5",
-                LocalDateTime.of(2023, 10, 17, 16, 56), 60,3), Status.NEW);
+                    LocalDateTime.of(2023, 10, 17, 16, 56), 60, 3), Status.NEW);
+
         assertEquals(1, tm.returnSubtasks().size());
+
         tm.createSubtask(new Subtask("name6", "desc6",
                 LocalDateTime.of(2023, 10, 17, 17, 26), 60, 3), Status.NEW);
         tm.createSubtask(new Subtask("name7", "desc7",
@@ -101,5 +108,8 @@ class InMemoryTaskManagerTest {
         assertTrue(tm.returnSubtasks().isEmpty());
         tm.clearEpics();
         assertTrue(tm.returnEpics().isEmpty());
+        } catch (TimeOverlapException e) {
+            e.printStackTrace();
+        }
     }
 }

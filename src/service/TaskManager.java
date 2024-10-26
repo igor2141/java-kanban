@@ -6,11 +6,18 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface TaskManager {
     /* 2 */
     /* a */
+    Map<Integer, Task> getTasks();
+
+    Map<Integer, Epic> getEpics();
+
+    Map<Integer, Subtask> getSubtasks();
+
     Set<Task> getPrioritizedTasks();
 
     List<Task> returnTasks();
