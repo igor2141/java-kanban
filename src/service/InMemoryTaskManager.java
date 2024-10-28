@@ -1,5 +1,7 @@
 package service;
 
+import exception.NotFoundException;
+import exception.TimeOverlapException;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -97,29 +99,41 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task returnTask(int id) {
-        final Task task = tasks.get(id);
-        historyManager.historyAdd(task);
-        return task;
+        if (tasks.containsKey(id)) {
+            final Task task = tasks.get(id);
+            historyManager.historyAdd(task);
+            return task;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     @Override
     public Epic returnEpic(int id) {
-        final Epic epic = epics.get(id);
-        historyManager.historyAdd(epic);
-        return epic;
+        if (epics.containsKey(id)) {
+            final Epic epic = epics.get(id);
+            historyManager.historyAdd(epic);
+            return epic;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     @Override
     public Subtask returnSubtask(int id) {
-        final Subtask subtask = subtasks.get(id);
-        historyManager.historyAdd(subtask);
-        return subtask;
+        if (subtasks.containsKey(id)) {
+            final Subtask subtask = subtasks.get(id);
+            historyManager.historyAdd(subtask);
+            return subtask;
+        } else {
+            throw new NotFoundException();
+        }
     }
 
     @Override
     public void createTask(Task task, Status status) {
         if (overlapCheck(task)) {
-            return;
+            throw new TimeOverlapException();
         }
         idCount++;
         task.setId(idCount);
@@ -138,7 +152,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubtask(Subtask subtask, Status status) {
         if (overlapCheck(subtask)) {
-            return;
+            throw new TimeOverlapException();
         }
         idCount++;
         subtask.setId(idCount);
@@ -152,10 +166,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (overlapCheck(task)) {
-            return;
+            throw new TimeOverlapException();
         }
         if (tasks.containsKey(task.getId())) {
             tasks.put(task.getId(), task);
+        } else {
+            throw new NotFoundException();
         }
     }
 
@@ -166,18 +182,22 @@ public class InMemoryTaskManager implements TaskManager {
             epics.put(epic.getId(), epic);
             epicStatusUpdate(epic.getId());
             epicTimeUpdate(epic.getId());
+        } else {
+            throw new NotFoundException();
         }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
         if (overlapCheck(subtask)) {
-            return;
+            throw new TimeOverlapException();
         }
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
             epicStatusUpdate(subtask.getEpicID());
             epicTimeUpdate(subtask.getEpicID());
+        } else {
+            throw new NotFoundException();
         }
 
     }
@@ -213,7 +233,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             return epics.get(id).getSubtaskArrayList();
         } else {
-            return null;
+            throw new NotFoundException();
         }
     }
 
